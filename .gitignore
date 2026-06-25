@@ -1,0 +1,94 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# NuGet
+*.nupkg
+packages/
+!packages/build/
+*.snupkg
+
+# Logs
+*.log
+
+# Test Results
+[Tt]est[Rr]esult*/
+[Bb]enchmarkDotNet.Artifacts/
+
+# Publish output
+publish/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Entity Framework
+*.mdf
+*.ldf
+
+# Generated files
+Generated_Code/
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment variables
+.env
+.env.*
+
+# Secrets
+secrets.json
+
+# Coverage
+coverage/
+coverage-results/
+*.coverage
+*.coveragexml
+
+# Resharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+
+# DotTrace
+*.dotCover
+
+# Azure
+PublishScripts/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Node.js (إذا كان المشروع يحتوي Frontend)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dist/
+build/
+
+# JetBrains Rider
+*.sln.iml
+
+*.settings.json
+*.bak
+*.mdf
+*.ldf
+*.db
+*.sqlite
+*.config
+*.vsix
