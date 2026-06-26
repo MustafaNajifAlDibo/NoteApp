@@ -3,6 +3,8 @@
 
         public MainPage() {
             InitializeComponent();
+
+            Contianer.Content = new Views.NoteView();
         }
 
     }
