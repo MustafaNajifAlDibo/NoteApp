@@ -1,11 +1,61 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel ="clr-namespace:NoteApp.ViewModels"
              x:Class="NoteApp.Views.NoteView">
-    <VerticalStackLayout>
+
+    <ContentView.BindingContext>
+        <viewModel:NoteViewModel/>
+    </ContentView.BindingContext>
+    
+    <VerticalStackLayout Padding="15">
         <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+            FontSize="Medium"
+            Text="Note Data"
+            HorizontalOptions="Start" />
+        <Border>
+            <VerticalStackLayout Spacing="5">
+                <Label
+                    FontSize="Small"
+                    Text="Note Title:"
+                    HorizontalOptions="Start"/>
+                <Entry
+                    Placeholder="Enter title here"
+                    Text="{Binding NoteTitle}"
+                    FontSize="Medium"/>
+                <Label
+                    FontSize="Small"
+                    Text="Note Description:"
+                    HorizontalOptions="Start"/>
+                <Editor
+                    Placeholder="Enter description here"
+                    Text="{Binding NoteDescription}"
+                    HeightRequest="200"
+                    FontSize="Medium"/>
+                <Button
+                    Command="{Binding AddNoteCommand}"
+                    Text="Add Note"/>
+            </VerticalStackLayout>
+        </Border>
+
+        <CollectionView 
+            ItemsSource="{Binding NoteCollection}" 
+            SelectedItem="{Binding SelectedNote}">
+            
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <VerticalStackLayout Padding="10,5">
+                        <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="Medium"/>
+                        <Label Text="{Binding Description}" FontSize="Small"/>
+                    </VerticalStackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            
+        </CollectionView> 
+        <HorizontalStackLayout Spacing="30">
+            <Button Text="Remove Note"/>
+            <Button Text="Edit Note"/>
+        </HorizontalStackLayout>
+        
     </VerticalStackLayout>
 </ContentView>

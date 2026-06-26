@@ -56,7 +56,7 @@ namespace NoteApp.ViewModels {
             NoteCollection = new ObservableCollection<Note>();
 
             AddNoteCommand = new Command(AddNote);
-            AddNoteCommand = new Command(DeleteNote);
+            RemoveNoteCommand = new Command(DeleteNote);
         }
 
         private void DeleteNote(object obj) {
