@@ -54,9 +54,9 @@
 
         </CollectionView>
         
-        <HorizontalStackLayout Spacing="30" Margin="10">
+        <HorizontalStackLayout Spacing="30">
             <Button Text="Remove Note" Command="{Binding RemoveNoteCommand}"/>
-            <Button Text="Edit Note"/>
+            <Button Text="Edit Note" Command="{Binding EditNoteCommand}"/>
         </HorizontalStackLayout>
         
     </VerticalStackLayout>

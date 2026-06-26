@@ -38,6 +38,9 @@ namespace NoteApp.ViewModels {
             set {
                 if (_selectedNote != value) {
                     _selectedNote = value;
+                    // Set from Collection to UI
+                    NoteTitle = _selectedNote.Title;
+                    NoteDescription = _selectedNote.Description;
                     OnPropertyChanged();
                 }
             }
@@ -57,6 +60,32 @@ namespace NoteApp.ViewModels {
 
             AddNoteCommand = new Command(AddNote);
             RemoveNoteCommand = new Command(DeleteNote);
+            EditNoteCommand = new Command(EditNote);
+        }
+
+        private async void EditNote(object obj) {
+            if (SelectedNote != null) {
+                if (string.IsNullOrEmpty(NoteTitle) || string.IsNullOrEmpty(NoteDescription)) {
+                    await Shell.Current.DisplayAlertAsync("Warning", "Messing one or two text", "OK");
+                    return;
+                }
+                foreach (Note note in NoteCollection.ToList()) {
+                    if(note == SelectedNote) {
+
+                        // Set new Note
+                        var newNote = new Note() {
+                            Id = note.Id,
+                            Title = NoteTitle,
+                            Description = NoteDescription
+                        };
+
+                        // Remove Note
+                        NoteCollection.Remove(note);
+                        NoteCollection.Add(newNote);
+                        SelectedNote = newNote;
+                    }
+                }
+            }
         }
 
         private void DeleteNote(object obj) {
@@ -70,8 +99,13 @@ namespace NoteApp.ViewModels {
             }
         }
 
-        private void AddNote(object obj) {
+        private async void AddNote(object obj) {
 
+            if (string.IsNullOrEmpty(NoteTitle) || string.IsNullOrEmpty(NoteDescription)) {
+                await Shell.Current.DisplayAlertAsync("Warning", "Messing one or two text", "OK");
+                return;
+            }
+                
             // Generatte a Unique ID for the new Note
             int newId = NoteCollection.Count > 0 ? 
                 NoteCollection.Max(x => x.Id) + 1: 1;
@@ -81,6 +115,7 @@ namespace NoteApp.ViewModels {
                 Description = NoteDescription
             };
             NoteCollection.Add(note);
+            SelectedNote = note;
 
             // Reset Values
             NoteTitle = string.Empty;
