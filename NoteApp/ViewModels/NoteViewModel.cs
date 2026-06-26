@@ -60,7 +60,9 @@ namespace NoteApp.ViewModels {
         }
 
         private void DeleteNote(object obj) {
-            if(SelectedNote != null) {
+
+            if (SelectedNote != null) {
+                
                 NoteCollection.Remove(SelectedNote);
                 // Reset Values
                 NoteTitle = string.Empty;

@@ -38,22 +38,24 @@
             </VerticalStackLayout>
         </Border>
 
-        <CollectionView 
-            ItemsSource="{Binding NoteCollection}" 
-            SelectedItem="{Binding SelectedNote}">
-            
+        <CollectionView
+            ItemsSource="{Binding NoteCollection}"
+            SelectedItem="{Binding SelectedNote, Mode=TwoWay}"
+            SelectionMode="Single">
+
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <VerticalStackLayout Padding="10,5">
-                        <Label Text="{Binding Title}" FontAttributes="Bold" FontSize="Medium"/>
-                        <Label Text="{Binding Description}" FontSize="Small"/>
+                        <Label Text="{Binding Title}" />
+                        <Label Text="{Binding Description}" />
                     </VerticalStackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
-            
-        </CollectionView> 
-        <HorizontalStackLayout Spacing="30">
-            <Button Text="Remove Note"/>
+
+        </CollectionView>
+        
+        <HorizontalStackLayout Spacing="30" Margin="10">
+            <Button Text="Remove Note" Command="{Binding RemoveNoteCommand}"/>
             <Button Text="Edit Note"/>
         </HorizontalStackLayout>
         
