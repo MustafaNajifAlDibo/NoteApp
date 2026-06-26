@@ -7,7 +7,8 @@ using System.Collections.ObjectModel;
 namespace NoteApp.ViewModels {
     public partial class NoteViewModel : ObservableObject{
 
-        DBContext _dBContext;
+        NoteEntity dataHelper;
+
 
         // Fields
         [ObservableProperty]
@@ -25,36 +26,35 @@ namespace NoteApp.ViewModels {
         // Constructor
         public NoteViewModel() {
             NoteCollection = new ObservableCollection<Note>();
-            _dBContext = new DBContext();
-            var ListOfNotes = _dBContext.Notes.ToList();
+
+            dataHelper = new NoteEntity();
+
+            LoadData();
         }
 
         [RelayCommand]
         private async Task<bool> EditNote() {
             
-                if (string.IsNullOrEmpty(NoteTitle) || string.IsNullOrEmpty(NoteDescription)) {
-                    await Shell.Current.DisplayAlertAsync("Warning", "Messing one or two text", "OK");
-                    return false;
+            if (string.IsNullOrEmpty(NoteTitle) || string.IsNullOrEmpty(NoteDescription)) {
+                await Shell.Current.DisplayAlertAsync("Warning", "Messing one or two text", "OK");
+                return false;
+            }
+            if(NoteCollection != null) {
+               
+                if (SelectedNote != null) {
+
+                    // Set new Note
+                    var newNote = new Note() {
+                        Id = SelectedNote.Id,
+                        Title = NoteTitle,
+                        Description = NoteDescription
+                    };
+                    await dataHelper.UpdateDataAsync(newNote);
+                    LoadData();
+
+                    SelectedNote = await dataHelper.FindAsync( newNote.Id);
                 }
-                if(NoteCollection != null) {
-                    foreach (Note note in NoteCollection.ToList()) {
-                        if (note == SelectedNote) {
-
-                            // Set new Note
-                            var newNote = new Note() {
-                                Id = note.Id,
-                                Title = NoteTitle,
-                                Description = NoteDescription
-                            };
-
-                            // Remove Note
-                            NoteCollection.Remove(note);
-                            NoteCollection.Add(newNote);
-                            SelectedNote = newNote;
-                        } 
-                    }
-                }
-
+            }
             return true;
         }
 
@@ -63,7 +63,9 @@ namespace NoteApp.ViewModels {
 
             if (SelectedNote != null) {
 
-                NoteCollection?.Remove(SelectedNote);
+                await dataHelper.RemoveDataAsync(SelectedNote);
+                LoadData();
+
                 // Reset Values
                 NoteTitle = string.Empty;
                 NoteDescription = string.Empty;
@@ -78,28 +80,14 @@ namespace NoteApp.ViewModels {
                 await Shell.Current.DisplayAlertAsync("Warning", "Messing one or two text", "OK");
                 return false;
             }
-                
-            // Generatte a Unique ID for the new Note
-            int newId = NoteCollection?.Count > 0 ? 
-                NoteCollection.Max(x => x.Id) + 1: 1;
 
             // for DB Test
-            var note1 = new Note{
+            var note = new Note{
                 Title = NoteTitle,
                 Description = NoteDescription
             };
-
-            await _dBContext.AddAsync(note1);
-            await _dBContext.SaveChangesAsync();
-
-            // Set New Note
-            var note = new Note {
-                Id = newId,
-                Title = NoteTitle,
-                Description = NoteDescription
-            };
-            NoteCollection?.Add(note);
-            SelectedNote = note;
+            await dataHelper.AddDataAsync(note);
+            LoadData();
 
             // Reset Values
             NoteTitle = string.Empty;
@@ -111,6 +99,14 @@ namespace NoteApp.ViewModels {
         public void SetData() {
             NoteTitle = SelectedNote?.Title;
             NoteDescription = SelectedNote?.Description;
+        }
+
+        public async void LoadData() {
+
+            NoteCollection?.Clear();
+            foreach (var note in await dataHelper.GetAllAsync()) {
+                NoteCollection?.Add(note);
+            }
         }
     }
 }
