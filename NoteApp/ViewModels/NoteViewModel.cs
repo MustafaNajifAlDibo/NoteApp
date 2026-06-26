@@ -1,73 +1,35 @@
-﻿using NoteApp.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using NoteApp.Models;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows.Input;
 
 namespace NoteApp.ViewModels {
-    public partial class NoteViewModel : INotifyPropertyChanged{
+    public partial class NoteViewModel : ObservableObject{
 
         // Fields
-        private string _noteTitle;
-        private string _noteDescription;
-        private Note _selectedNote;
+        [ObservableProperty]
+        public partial string? NoteTitle { get; set; }
 
-        // get set
-        public string NoteTitle {
-            get => _noteTitle;
-            set {
-                if(_noteTitle != value) { 
-                    _noteTitle = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        [ObservableProperty]
+        public partial string? NoteDescription { get; set; }
 
-        public string NoteDescription {
-            get => _noteDescription;
-            set {
-                if (_noteDescription != value) {
-                    _noteDescription = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        [ObservableProperty]
+        public partial Note? SelectedNote { get; set; }
 
-        public Note SelectedNote {
-            get => _selectedNote;
-            set {
-                if (_selectedNote != value) {
-                    _selectedNote = value;
-                    // Set from Collection to UI
-                    NoteTitle = _selectedNote.Title;
-                    NoteDescription = _selectedNote.Description;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        // Properties
-        public ObservableCollection<Note> NoteCollection { get; set; }
-
-        // Commands
-        public ICommand AddNoteCommand { get;}
-        public ICommand EditNoteCommand { get; }
-        public ICommand RemoveNoteCommand { get; }
+        [ObservableProperty]
+        public partial ObservableCollection<Note>? NoteCollection { get; set; }
 
         // Constructor
         public NoteViewModel() {
             NoteCollection = new ObservableCollection<Note>();
-
-            AddNoteCommand = new Command(AddNote);
-            RemoveNoteCommand = new Command(DeleteNote);
-            EditNoteCommand = new Command(EditNote);
         }
 
-        private async void EditNote(object obj) {
+        [RelayCommand]
+        private async Task<bool> EditNote() {
             if (SelectedNote != null) {
                 if (string.IsNullOrEmpty(NoteTitle) || string.IsNullOrEmpty(NoteDescription)) {
                     await Shell.Current.DisplayAlertAsync("Warning", "Messing one or two text", "OK");
-                    return;
+                    return false;
                 }
                 foreach (Note note in NoteCollection.ToList()) {
                     if(note == SelectedNote) {
@@ -83,27 +45,31 @@ namespace NoteApp.ViewModels {
                         NoteCollection.Remove(note);
                         NoteCollection.Add(newNote);
                         SelectedNote = newNote;
-                    }
+                    }else return false;
                 }
             }
+            return true;
         }
 
-        private void DeleteNote(object obj) {
+        [RelayCommand]
+        private async Task<bool> DeleteNote() {
 
             if (SelectedNote != null) {
-                
+
                 NoteCollection.Remove(SelectedNote);
                 // Reset Values
                 NoteTitle = string.Empty;
                 NoteDescription = string.Empty;
-            }
+                return true;
+            } else return false;
         }
 
-        private async void AddNote(object obj) {
+        [RelayCommand]
+        private async Task<bool> AddNote() {
 
             if (string.IsNullOrEmpty(NoteTitle) || string.IsNullOrEmpty(NoteDescription)) {
                 await Shell.Current.DisplayAlertAsync("Warning", "Messing one or two text", "OK");
-                return;
+                return false;
             }
                 
             // Generatte a Unique ID for the new Note
@@ -120,14 +86,9 @@ namespace NoteApp.ViewModels {
             // Reset Values
             NoteTitle = string.Empty;
             NoteDescription = string.Empty;
+
+            return true;
         }
 
-
-        // PropertyChanged
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName]string? propertyName = null) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }
