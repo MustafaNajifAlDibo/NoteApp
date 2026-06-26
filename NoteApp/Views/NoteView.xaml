@@ -39,6 +39,8 @@
         </Border>
 
         <CollectionView
+            x:Name="CollectionViewNote"
+            SelectionChanged="CollectionViewNote_SelectionChanged"
             ItemsSource="{Binding NoteCollection}"
             SelectedItem="{Binding SelectedNote, Mode=TwoWay}"
             SelectionMode="Single">

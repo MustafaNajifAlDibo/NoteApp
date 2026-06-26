@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using AndroidX.Activity;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NoteApp.Models;
 using System.Collections.ObjectModel;
@@ -31,21 +32,23 @@ namespace NoteApp.ViewModels {
                     await Shell.Current.DisplayAlertAsync("Warning", "Messing one or two text", "OK");
                     return false;
                 }
-                foreach (Note note in NoteCollection.ToList()) {
-                    if(note == SelectedNote) {
+                if(NoteCollection != null) {
+                    foreach (Note note in NoteCollection.ToList()) {
+                        if (note == SelectedNote) {
 
-                        // Set new Note
-                        var newNote = new Note() {
-                            Id = note.Id,
-                            Title = NoteTitle,
-                            Description = NoteDescription
-                        };
+                            // Set new Note
+                            var newNote = new Note() {
+                                Id = note.Id,
+                                Title = NoteTitle,
+                                Description = NoteDescription
+                            };
 
-                        // Remove Note
-                        NoteCollection.Remove(note);
-                        NoteCollection.Add(newNote);
-                        SelectedNote = newNote;
-                    }else return false;
+                            // Remove Note
+                            NoteCollection.Remove(note);
+                            NoteCollection.Add(newNote);
+                            SelectedNote = newNote;
+                        } else return false;
+                    }
                 }
             }
             return true;
@@ -56,7 +59,7 @@ namespace NoteApp.ViewModels {
 
             if (SelectedNote != null) {
 
-                NoteCollection.Remove(SelectedNote);
+                NoteCollection?.Remove(SelectedNote);
                 // Reset Values
                 NoteTitle = string.Empty;
                 NoteDescription = string.Empty;
@@ -73,14 +76,14 @@ namespace NoteApp.ViewModels {
             }
                 
             // Generatte a Unique ID for the new Note
-            int newId = NoteCollection.Count > 0 ? 
+            int newId = NoteCollection?.Count > 0 ? 
                 NoteCollection.Max(x => x.Id) + 1: 1;
             // Set New Note
             var note = new Note {
                 Title = NoteTitle,
                 Description = NoteDescription
             };
-            NoteCollection.Add(note);
+            NoteCollection?.Add(note);
             SelectedNote = note;
 
             // Reset Values
@@ -90,5 +93,9 @@ namespace NoteApp.ViewModels {
             return true;
         }
 
+        public void SetData() {
+            NoteTitle = SelectedNote?.Title;
+            NoteDescription = SelectedNote?.Description;
+        }
     }
 }

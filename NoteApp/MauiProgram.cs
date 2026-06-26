@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using NoteApp.ViewModels;
+using NoteApp.Views;
 
 namespace NoteApp {
     public static class MauiProgram {
@@ -11,8 +13,11 @@ namespace NoteApp {
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            builder.Services.AddSingleton<NoteView>();
+            builder.Services.AddSingleton<NoteViewModel>();
+
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();

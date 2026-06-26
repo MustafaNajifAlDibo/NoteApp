@@ -1,4 +1,5 @@
-﻿using NoteApp.Views;
+﻿using NoteApp.ViewModels;
+using NoteApp.Views;
 
 namespace NoteApp {
     public partial class MainPage : ContentPage {
@@ -6,7 +7,7 @@ namespace NoteApp {
         public MainPage() {
             InitializeComponent();
 
-            Contianer.Content = new NoteView();
+            Contianer.Content = new NoteView(new NoteViewModel());
         }
 
     }
