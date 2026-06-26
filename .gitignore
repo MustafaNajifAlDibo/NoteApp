@@ -1,7 +1,3 @@
-# Build results
-[Bb]in/
-[Oo]bj/
-
 # Visual Studio
 .vs/
 *.user
@@ -9,86 +5,64 @@
 *.userosscache
 *.sln.docstates
 
+# Build
+bin/
+obj/
+artifacts/
+
 # Rider
 .idea/
 
 # VS Code
 .vscode/
 
-# NuGet
-*.nupkg
-packages/
-!packages/build/
-*.snupkg
-
 # Logs
 *.log
 
-# Test Results
-[Tt]est[Rr]esult*/
-[Bb]enchmarkDotNet.Artifacts/
-
-# Publish output
-publish/
-
-# ASP.NET Scaffolding
-ScaffoldingReadMe.txt
-
-# Entity Framework
-*.mdf
-*.ldf
-
-# Generated files
-Generated_Code/
-
-# OS Files
-.DS_Store
-Thumbs.db
-desktop.ini
-
-# Environment variables
-.env
-.env.*
-
-# Secrets
-secrets.json
-
-# Coverage
-coverage/
-coverage-results/
-*.coverage
-*.coveragexml
-
-# Resharper
-_ReSharper*/
-*.[Rr]e[Ss]harper
-
-# DotTrace
-*.dotCover
-
-# Azure
-PublishScripts/
-
-# Temporary files
+# Temporary
 *.tmp
 *.temp
-
-# Node.js (إذا كان المشروع يحتوي Frontend)
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-dist/
-build/
-
-# JetBrains Rider
-*.sln.iml
-
-*.settings.json
 *.bak
-*.mdf
-*.ldf
+
+# NuGet
+packages/
+*.nupkg
+
+# Publish
+publish/
+AppPackages/
+
+# Android
+*.apk
+*.aab
+
+# iOS
+*.ipa
+
+# Windows
+*.msix
+*.appx
+*.appxbundle
+
+# Certificates
+*.keystore
+*.jks
+*.pfx
+*.snk
+*.pem
+*.mobileprovision
+
+# Secrets
+.env
+.env.*
+secrets.json
+appsettings.Development.json
+
+# SQLite local databases
 *.db
-*.sqlite
-*.config
-*.vsix
+*.db-shm
+*.db-wal
+
+# OS
+.DS_Store
+Thumbs.db
